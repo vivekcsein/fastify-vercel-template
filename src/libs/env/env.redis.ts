@@ -7,6 +7,7 @@ dotenv.config();
 const envConfigSchema = z.object({
   REDIS_URL: z.url().trim().default("redis-url"),
   REDIS_TOKEN: z.string().default("redis-token"),
+  REDIS_CONNECTION_ON: z.boolean().default(false),
 });
 
 // ✅ Validate process.env safely
