@@ -1,11 +1,16 @@
 import Fastify from "fastify";
 import fastifyStatic from "@fastify/static";
 import type { FastifyInstance } from "fastify";
+import { envAppConfig } from "./libs/env/env.app";
 import { configViews, Home } from "./libs/configs/config.view";
+
+//import plugins
+import corsPlugin from "./libs/plugins/plugin.cors";
+import cookiePlugin from "./libs/plugins/plugin.cookie";
+import rateLimitPlugin from "./libs/plugins/plugin.ratelimits";
 
 // import routes
 import supabaseTestRoute from "./api/test/test.routes";
-import { envAppConfig } from "./libs/env/env.app";
 
 const createApp = async () => {
   const app: FastifyInstance = Fastify({
@@ -16,6 +21,9 @@ const createApp = async () => {
 
   //register all plugins
   //serve static files
+  await app.register(rateLimitPlugin);
+  await app.register(cookiePlugin);
+  await app.register(corsPlugin);
   await app.register(fastifyStatic, configViews);
 
   app.get("/", async (_req, reply) => {

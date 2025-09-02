@@ -10,6 +10,14 @@ const envConfigSchema = z.object({
     .url()
     .trim()
     .default("http://localhost:7164/api"),
+  APP_RATE_LIMIT_MAX: z.number().default(10),
+  APP_RATE_LIMIT_TIME_WINDOW: z
+    .string()
+    .regex(
+      /^\d+[smhd]$/,
+      "Invalid time window format. Use formats like '1m', '30s', '2h', or '1d'."
+    )
+    .default("1m"),
 });
 
 // ✅ Validate process.env safely
@@ -27,6 +35,8 @@ if (!parsed.success) {
 export const envBackendConfig = Object.freeze({
   APP_BACKEND: parsed.data.NEXT_PUBLIC_BACKEND,
   APP_BACKEND_API_URL: parsed.data.NEXT_PUBLIC_BACKEND_API_URL,
+  APP_RATE_LIMIT_MAX: parsed.data.APP_RATE_LIMIT_MAX,
+  APP_RATE_LIMIT_TIME_WINDOW: parsed.data.APP_RATE_LIMIT_TIME_WINDOW,
 });
 
 // ✅ Optional: Export type
