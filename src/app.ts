@@ -9,6 +9,8 @@ import { configViews, Home } from "./libs/configs/config.view";
 import corsPlugin from "./libs/plugins/plugin.cors";
 import cookiePlugin from "./libs/plugins/plugin.cookie";
 import helmetPlugin from "./libs/plugins/plugin.helmet";
+import swaggerPlugin from "./libs/plugins/plugin.swagger";
+import swaggerUIPlugin from "./libs/plugins/plugin.swagger_ui";
 import rateLimitPlugin from "./libs/plugins/plugin.ratelimits";
 
 // import routes
@@ -28,6 +30,8 @@ const createApp = async () => {
   await app.register(rateLimitPlugin);
   await app.register(cookiePlugin);
   await app.register(helmetPlugin);
+  await app.register(swaggerPlugin);
+  await app.register(swaggerUIPlugin);
   await app.register(fastifyStatic, configViews);
 
   //register all database plugins
@@ -39,7 +43,7 @@ const createApp = async () => {
 
   // register api routes
   app.register(supabaseTestRoute, { prefix: `${envAppConfig.API_PATH}/test` });
-  app.register(authPlugin)
+  app.register(authPlugin);
 
   app.get("/api/health", (_req, reply) => {
     return reply.status(200).send({
